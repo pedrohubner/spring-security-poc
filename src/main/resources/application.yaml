@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: spring-security-poc
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jwt-auth-demo
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  flyway:
+    enabled: true
+
+jwt:
+  key: dev-only-super-secret-change-me-please-32+
+
+server:
+  port: 9000
+  servlet:
+    context-path: /spring-security-poc
+
+logging:
+  level:
+    org.springframework.security: TRACE
