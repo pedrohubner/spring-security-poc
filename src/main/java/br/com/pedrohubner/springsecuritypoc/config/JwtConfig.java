@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.time.Duration;
 
 @Configuration
 public class JwtConfig {
@@ -28,8 +30,10 @@ public class JwtConfig {
     public JwtDecoder jwtDecoder() {
         var bytes = jwtKey.getBytes();
         var originalKey = new SecretKeySpec(bytes, 0, bytes.length, ALGORITHM);
-        return NimbusJwtDecoder.withSecretKey(originalKey)
+        var decoder = NimbusJwtDecoder.withSecretKey(originalKey)
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
+        decoder.setJwtValidator(new JwtTimestampValidator(Duration.ZERO));
+        return decoder;
     }
 }
