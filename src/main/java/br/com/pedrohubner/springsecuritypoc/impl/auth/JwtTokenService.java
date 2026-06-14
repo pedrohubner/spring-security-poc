@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class JwtTokenService {
         return JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(15L, ChronoUnit.MINUTES))
+                .expiresAt(now.plus(10L, ChronoUnit.SECONDS))
                 .subject(authentication.getName())
                 .claim("scope", this.getScope(authentication))
                 .build();
@@ -40,9 +41,9 @@ public class JwtTokenService {
                 .collect(Collectors.joining(" "));
     }
 
-    public Long extractExpirationTime(String token) {
+    public String extractExpirationTime(String token) {
         var jwt = jwtDecoder.decode(token);
         var expirationTime = (Instant) jwt.getClaim("exp");
-        return expirationTime.toEpochMilli();
+        return expirationTime.atZone(ZoneId.of("America/Sao_Paulo")).toLocalDateTime().toString();
     }
 }
