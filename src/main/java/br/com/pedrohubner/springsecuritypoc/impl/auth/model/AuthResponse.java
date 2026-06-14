@@ -4,6 +4,6 @@ public record AuthResponse(
         String username,
         String accessToken,
         String refreshToken,
-        Long accessExpiresAt
+        String accessExpiresAt
 ) {
 }
